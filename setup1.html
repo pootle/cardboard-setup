@@ -1,0 +1,310 @@
+<html>
+<head>
+    <style type="text/css">
+        td.b {
+            width:9%;
+            height:9%;
+            text-align: center;
+        }
+        td.r0 {
+            background-color: red;
+        }
+        td.r1 {
+            background-color: #e0c0c0;
+        }
+        td.r2 {
+            background-color: #c0e0c0;
+        }
+        td.r3 {
+            background-color: #c0c0e0;
+        }
+        td.r4 {
+            background-color: #c0a0a0;
+        }
+        td.r5 {
+            background-color: #505050;
+            color: #e0e0ff;
+        }
+        table.test {
+            width: 100%;
+            height: 100%;
+            table-layout: fixed;
+        }
+        
+        div.cpanel {
+            color:black;
+            background-color: white;
+        }
+        
+        .pb {
+            font-size: 160%;
+        }
+    </style>
+    <script type="text/javascript" >
+        function moveit(elid,v,dist) {
+            var target = document.getElementById(elid)
+            if (v == 0) {
+                var ov = target.style.left.split('px')
+                ovnewi = parseInt(ov[0]) + dist
+                if (ovnewi < 0) {
+                    ovnewi = 0
+                }
+                ovnew = '' + ovnewi + 'px'
+                target.style.left = ovnew
+                setPersist(elid + '.left',ovnew)
+            } else {
+                var ov = target.style.top.split('px')
+                ovnewi = parseInt(ov[0]) + dist
+                if (ovnewi < 0) {
+                    ovnewi = 0
+                }
+                ovnew = '' + ovnewi + 'px'
+                target.style.top = ovnew
+                setPersist(elid + '.top',ovnew)
+            }
+        }
+        
+        function scaleit(elid,change) {
+            var target = document.getElementById(elid);
+            var ov = target.style.width.split('px');
+            var target = document.getElementById(elid);
+            var ovh = target.style.height;
+            var ovnewi = parseInt(ov[0]) + change;
+            var ovnew = '' + ovnewi + 'px';
+            target.style.width = ovnew;
+            target.style.height = ovnew;
+            setPersist(elid + '.size', ovnew)
+        }
+        
+        function flipRight() {
+            var bia = document.getElementById('righttp');
+            var wasbin = bia.style.display == 'block';
+            bia.style.display = (wasbin) ? 'none' : 'block';
+        }
+        
+        function dup() {
+            var target = document.getElementById('righttp');
+            var ovnew = getPersist('lefttp.size');
+            setPersist('righttp.size', ovnew);
+            target.style.width = ovnew;
+            target.style.height = ovnew;
+            ovnew = getPersist('lefttp.top');
+            setPersist('righttp.top', ovnew);
+            target.style.top = ovnew;
+        }
+        
+        function flipzeds() {
+            var bia = document.getElementById('leftzeds');
+            var wason = bia.style.display == 'block';
+            var bib = document.getElementById('rightzeds');
+            bia.style.display = (wason) ? 'none' : 'block';
+            bib.style.display = (wason) ? 'none' : 'block';
+        }
+        
+        function restorevals() {
+            var lstore = window['localStorage'];
+            for (var i = 0; i < lstore.length; i++){
+                var k = lstore.key(i)
+                var ik = k.split('.');
+                var iv = lstore.getItem(k);
+                var target = document.getElementById(ik[0])
+                if (!(target === null)) {
+                    switch (ik[1]) {
+                        case 'top':
+                            target.style.top = iv;
+                            break;
+                        case 'left':
+                            target.style.left = iv
+                            break;
+                        case 'size':
+                            target.style.width = iv;
+                            target.style.height = iv;
+                            break;
+                    }
+                }
+            }
+        }
+        
+        function getPersist(pname) {
+            return window['localStorage'].getItem(pname);
+        }
+        
+        function getPersistInt(pname, defval) {
+            var mystore = window['localStorage'];
+            if(!mystore.getItem(pname)) {
+                mystore.setItem(pname,defval);
+            }
+            rv = parseInt(mystore.getItem(pname));
+            if (rv == NaN) {
+                mystore.setItem(pname,defval);
+                return defval
+            } else {
+                return rv
+            }
+        }
+        
+        function setPersist(pname,pval) {
+            window['localStorage'].setItem(pname, pval);
+        }
+        
+        function toggleFullScreen() {
+            // from http://www.html5rocks.com/en/mobile/fullscreen/
+            var doc = window.document;
+            var docEl = doc.documentElement;
+
+            var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+            var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+            if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+                requestFullScreen.call(docEl);
+            } else {
+                cancelFullScreen.call(doc);
+            }
+        }
+    </script>
+</head>
+    <body style="background-color: #000000" onload="restorevals()" >
+        <div id="lefttp" style="background-color: #050505; position: absolute; top:0px; left:0px; width: 330px; height: 330px; ">
+            
+            <table class="test">
+                <tr>
+                    <td class="b r5">1</td><td class="b r5">2</td><td class="b r5">3</td><td class="b r5">4</td><td class="b r5">5</td><td class="b r5">6</td><td class="b r5">7</td><td class="b r5">8</td><td class="b r5">9</td><td class="b r5">A</td><td class="b r5">B</td>
+                </tr>
+                <tr>
+                    <td class="b r5">2</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">3</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">4</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">5</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r2">x</td><td class="b r1">x</td><td class="b r1">x</td><td class="b r1">x</td><td class="b r2">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">6</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r2">x</td><td class="b r1">x</td><td class="b r0">O</td><td class="b r1">x</td><td class="b r2">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">7</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r2">x</td><td class="b r1">x</td><td class="b r1">x</td><td class="b r1">x</td><td class="b r2">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">8</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">9</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">A</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">B</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td>
+                </tr>
+            </table>
+            <div id="leftzeds" style="display: none; background-color: #00000000; position: absolute; top:0px; left:0px; width: 100%; height: 100%;">
+                <div style="background-color: #00000000; color: white; position: absolute; top:53%; left:50.6%; width: 3%; height: 3%; ">
+                <span style="font-size: 100%" >Z</span></div>
+                <div style="background-color: #00000000; color: white; position: absolute; top:56%; left:50.8%; width: 3%; height: 3%; ">
+                <span style="font-size: 115%" >Z</span></div>
+                <div style="background-color: #00000000; color: white; position: absolute; top:60%; left:51.2%; width: 3%; height: 3%; ">
+                <span style="font-size: 125%" >Z</span></div>
+                <div style="background-color: #00000000; color: white; position: absolute; top:66%; left:52%; width: 3%; height: 3%; ">
+                <span style="font-size: 150%" >Z</span></div>
+            </div>
+        </div>
+        <div id="righttp" style="background-color: #050505; position: absolute; top:0px; left:350px; width: 330px; height: 330px; display:none; ">
+            <table class="test">
+                <tr>
+                    <td class="b r5">1</td><td class="b r5">2</td><td class="b r5">3</td><td class="b r5">4</td><td class="b r5">5</td><td class="b r5">6</td><td class="b r5">7</td><td class="b r5">8</td><td class="b r5">9</td><td class="b r5">A</td><td class="b r5">B</td>
+                </tr>
+                <tr>
+                    <td class="b r5">2</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">3</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">4</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">5</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r2">x</td><td class="b r1">x</td><td class="b r1">x</td><td class="b r1">x</td><td class="b r2">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">6</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r2">x</td><td class="b r1">x</td><td class="b r0">O</td><td class="b r1">x</td><td class="b r2">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">7</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r2">x</td><td class="b r1">x</td><td class="b r1">x</td><td class="b r1">x</td><td class="b r2">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">8</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r2">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">9</td><td class="b r4">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r3">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">A</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r4">x</td><td class="b r5">x</td>
+                </tr>
+                <tr>
+                    <td class="b r5">B</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td><td class="b r5">x</td>
+                </tr>
+            </table>
+            <div id="rightzeds"style="display: none; background-color: #00000000; position: absolute; top:0px; left:0px; width: 100%; height: 100%;">
+                <div style="background-color: #00000000; color: white; position: absolute; top:53%; left:49.4%; width: 3%; height: 3%; ">
+                <span style="font-size: 100%" >Z</span></div>
+                <div style="background-color: #00000000; color: white; position: absolute; top:56%; left:49.2%; width: 3%; height: 3%; ">
+                <span style="font-size: 115%" >Z</span></div>
+                <div style="background-color: #00000000; color: white; position: absolute; top:60%; left:48.8%; width: 3%; height: 3%; ">
+                <span style="font-size: 125%" >Z</span></div>
+                <div style="background-color: #00000000; color: white; position: absolute; top:66%; left:48%; width: 3%; height: 3%; ">
+                <span style="font-size: 150%" >Z</span></div>
+            </div>
+        </div>
+        <div id="ctrlpanel" class="cpanel" style="position: absolute; top:0px; left:0px; font-size: 200%">
+            <table>
+                <tr>
+                    <td rowspan="2" ><span class="pb" onclick="toggleFullScreen()">P</span></td>
+                    
+                    <td><span class="pb" onclick="moveit('ctrlpanel',1,-5)">&#x2191;</span></td>
+                    <td><span class="pb" onclick="moveit('ctrlpanel',1,-50)">&#x21c8;</span></td>
+                    <td><span class="pb" onclick="moveit('ctrlpanel',0,-5)">&#x2190;</span></td>
+                    <td><span class="pb" onclick="moveit('ctrlpanel',0,5)">&#x2192;</span></td>
+                    
+                    <td rowspan="2" ><span class="pb" >L</span></td>
+                    
+                    <td><span class="pb" onclick="moveit('lefttp',1,-5)">&#x2191;</span></td>
+                    <td><span class="pb" onclick="moveit('lefttp',1,-50)">&#x21c8;</span></td>
+                    <td><span class="pb" onclick="moveit('lefttp',0,-5)">&#x2190;</span></td>
+                    <td><span class="pb" onclick="moveit('lefttp',0,5)">&#x2192;</span></td>
+                    <td><span class="pb" onclick="scaleit('lefttp',1)">&#x2194;</span></td>
+                    <td><span class="pb" onclick="scaleit('lefttp',10)">&#x21d4;</span></td>
+                    
+                    <td rowspan="2"><span class="pb" onclick="flipRight()" >R</span>
+                    <td><span class="pb" onclick="dup()">&#x21b7;</span></td>
+                    <td><span class="pb" onclick="moveit('righttp',1,-5)">&#x2191;</span></td>
+                    <td><span class="pb" onclick="moveit('righttp',0,-5)">&#x2190;</span></td>
+                    <td><span class="pb" onclick="moveit('righttp',0,5)">&#x2192;</span></td>
+                    
+                </tr>
+                <tr>
+                    <td><span  class="pb" onclick="moveit('ctrlpanel',1,+5)">&#x2193;</span></td>
+                    <td><span  class="pb" onclick="moveit('ctrlpanel',1,+50)">&#x21ca;</span></td>
+                    <td><span class="pb" onclick="moveit('ctrlpanel',0,-50)">&#x21c7;</span></td>
+                    <td><span class="pb" onclick="moveit('ctrlpanel',0,50)">&#x21c9;</span></td>
+                    
+                    <td><span  class="pb" onclick="moveit('lefttp',1,+5)">&#x2193;</span></td>
+                    <td><span  class="pb" onclick="moveit('lefttp',1,+50)">&#x21ca;</span></td>
+                    <td><span class="pb" onclick="moveit('lefttp',0,-50)">&#x21c7;</span></td>
+                    <td><span class="pb" onclick="moveit('lefttp',0,50)">&#x21c9;</span></td>
+                    <td><span class="pb" onclick="scaleit('lefttp',-1)">&#x21ae;</span></td>
+                    <td><span class="pb" onclick="scaleit('lefttp',-10)">&#x21ce;</span></td>
+                    
+                    <td></td>
+                    <td><span  class="pb" onclick="moveit('righttp',1,+5)">&#x2193;</span></td>
+                    <td></td>
+                    <td><span  class="pb" onclick="flipzeds()">&#11216;</span></td>
+                </tr>
+            </table>
+        </div>
+
+    </body>
+</html>
